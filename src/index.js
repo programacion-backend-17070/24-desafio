@@ -4,6 +4,11 @@
   const mongoose = require("mongoose")
   const app = express();
 
+  // passport
+  const passport = require('passport')
+  const flash = require('express-flash')
+
+  // handlebars
   const { engine } = require('express-handlebars');
 
   // middlewares
@@ -25,17 +30,24 @@
 
   await mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS} `)
 
+  const initializePassport = require("./passport/local")
+  initializePassport(passport)
+
   app.set('view engine', 'hbs');
   app.engine('hbs', engine({
     layoutsDir: path.join(__dirname, '../views/layouts'),
     extname: 'hbs',
-    defaultLayout: 'index'
+    defaultLayout: 'index',
+    helpers: {
+      json: (obj) => JSON.stringify(obj)
+    }
   }));
 
   console.log(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`)
   // json middlewares -> req.body {}
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use(flash())
   app.use(cookieParser("esto es un secreto")) // req.cookies = {}
   app.use(session({
     secret: "secret",
@@ -49,6 +61,8 @@
       autoRemove: "native"
     })
   })) // req.session
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   app.use("/static/", express.static(path.join(__dirname, "../public")))
 

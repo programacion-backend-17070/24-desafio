@@ -1,12 +1,13 @@
 const Router = require("express").Router
 const auth = require("../middlewares/auth")
+const passport = require('passport')
 const userModel = require("../models/user")
 
 const router = Router()
 
 router.get("/", auth, (req, res) => {
 
-  const { firstname, lastname } = req.session.user
+  const { firstname, lastname } = req.user
 
   res.render("main", { name: `${firstname} ${lastname}` })
 })
@@ -14,89 +15,94 @@ router.get("/", auth, (req, res) => {
 router.get("/login", (req, res) => res.render("login", { layout: 'login' }))
 router.get("/register", (req, res) => res.render("register", { layout: 'login' }))
 
-router.post("/register", async (req, res) => {
-  const { email, pwd, fname, lname } = req.body
+// router.post("/register", async (req, res) => {
+//   const { email, pwd, fname, lname } = req.body
 
-  // checar que no exista el email
-  // guardar usuario en db
-  // crear session
-  // redirigir a pagina principal (landing page) 
+//   // checar que no exista el email
+//   // guardar usuario en db
+//   // crear session
+//   // redirigir a pagina principal (landing page) 
 
-  try {
-    if (await userModel.existsByEmail(email)) {
-      res.render("register", {
-        layout: 'login',
-        error: 'user already exists!'
-      })
-    }
+//   try {
+//     if (await userModel.existsByEmail(email)) {
+//       res.render("register", {
+//         layout: 'login',
+//         error: 'user already exists!'
+//       })
+//     }
 
-    const user = await userModel.save({
-      email,
-      firstname: fname,
-      lastname: lname,
-      password: pwd
-    })
+//     const user = await userModel.save({
+//       email,
+//       firstname: fname,
+//       lastname: lname,
+//       password: pwd
+//     })
 
-    console.log(user)
-    req.session.user = {
-      id: user._id,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email
-    }
+//     console.log(user)
+//     req.session.user = {
+//       id: user._id,
+//       firstname: user.firstname,
+//       lastname: user.lastname,
+//       email: user.email
+//     }
 
-    res.redirect("/")
+//     res.redirect("/")
 
-  } catch (err) {
-    return res.send("an error ocurred: " + err.message)
-  }
-})
+//   } catch (err) {
+//     return res.send("an error ocurred: " + err.message)
+//   }
+// })
 
-router.post("/login", async (req, res) => {
-  const { email, pwd } = req.body
+router.post('/register', passport.authenticate('register', {
+  successRedirect: '/',
+  failureRedirect: '/register',
+  failureFlash: true
+}))
 
-  // checar que exista el email
-  // checar que passwords coincidan
-  // crear session
-  // redirigir a pagina principal (landing page)
-  try {
-    if (!await userModel.existsByEmail(email)) {
-      return res.render("login", {
-        layout: 'login',
-        error: 'user does not exist!'
-      })
-    }
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
 
-    if (!await userModel.isPasswordValid(email, pwd)) {
-      return res.render("login", {
-        layout: 'login',
-        error: 'incorrect password!'
-      })
-    }
+// router.post("/login", async (req, res) => {
+//   const { email, pwd } = req.body
 
-    const user = await userModel.getByEmail(email)
+//   // checar que exista el email
+//   // checar que passwords coincidan
+//   // crear session
+//   // redirigir a pagina principal (landing page)
+//   try {
+//     if (!await userModel.existsByEmail(email)) {
+//       return res.render("login", {
+//         layout: 'login',
+//         error: 'user does not exist!'
+//       })
+//     }
+
+//     if (!await userModel.isPasswordValid(email, pwd)) {
+//       return res.render("login", {
+//         layout: 'login',
+//         error: 'incorrect password!'
+//       })
+//     }
+
+//     const user = await userModel.getByEmail(email)
 
 
-    req.session.user = user
+//     req.session.user = user
 
-    res.redirect("/")
-  } catch (err) {
-    return res.send("an error ocurred: " + err.message)
-  }
-})
+//     res.redirect("/")
+//   } catch (err) {
+//     return res.send("an error ocurred: " + err.message)
+//   }
+// })
 
 router.get("/logout", auth, (req, res) => {
-  const { firstname, lastname } = req.session.user
+  const { firstname, lastname } = req.user
 
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err)
-      res.send("hubo un error")
-      return
-    }
-
-    res.render("logout", { layout: 'logout', name: `${firstname} ${lastname}` }) // despues de aqui el backend no puede hacer mas nada
-  })
+  req.logOut()
+  res.render("logout", { layout: 'logout', name: `${firstname} ${lastname}` }) // despues de aqui el backend no puede hacer mas nada
 })
 
 module.exports = router
