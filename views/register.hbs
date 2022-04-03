@@ -6,13 +6,7 @@
   <fieldset class="uk-fieldset">
     <legend class="uk-legend">Register</legend>
 
-    {{#if error}}
-      <div class="uk-margin">
-        <div class="uk-alert-danger" uk-alert>
-          <p>{{{error}}}</p>
-        </div>
-      </div>
-    {{/if}}
+    {{> auth-errors}}
 
     <div class="uk-margin">
       <label class="uk-form-label" for="email">Email</label>
