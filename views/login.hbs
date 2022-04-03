@@ -1,25 +1,33 @@
-<form class="uk-position-center" action="/login" method="POST">
+<form class="uk-position-center uk-form-stacked" action="/login" method="POST">
   <fieldset class="uk-fieldset">
     <legend class="uk-legend">Enter your credentials</legend>
+
     <div class="uk-margin">
-      <div class="uk-inline">
-        <span class="uk-form-icon" uk-icon="icon: user"></span>
-        <input name="email" class="uk-input" type="text" />
+      <label class="uk-form-label" for="email">Email</label>
+      <div class="uk-form-controls">
+        <input
+          class="uk-input"
+          type="text"
+          name="email"
+        />
       </div>
     </div>
 
     <div class="uk-margin">
-      <div class="uk-inline">
-        <span
-          class="uk-form-icon uk-form-icon-flip"
-          uk-icon="icon: lock"
-        ></span>
-        <input name="pwd" class="uk-input" type="password" />
+      <label class="uk-form-label" for="email">Password</label>
+      <div class="uk-form-controls">
+        <input
+          class="uk-input"
+          type="password"
+          name="pwd"
+        />
       </div>
     </div>
 
     <div class="uk-margin">
       <button type="submit" class="uk-button uk-button-primary">Login</button>
     </div>
+
+    <a class="uk-link" href="/register">Registrate</a>
   </fieldset>
 </form>

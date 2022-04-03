@@ -1,5 +1,6 @@
 const Router = require("express").Router
 const auth = require("../middlewares/auth")
+// const userModel = require("../models/user")
 
 const router = Router()
 
@@ -11,15 +12,19 @@ router.get("/", auth, (req, res) => {
 })
 
 router.get("/login", (req, res) => res.render("login", { layout: 'login' }))
+router.get("/register", (req, res) => res.render("register", { layout: 'login' }))
 
 router.post("/login", (req, res) => {
-  const { username } = req.body
+  res.send(req.body)
+})
 
-  req.session.user = {
-    name: username
-  }
+router.post("/register", (req, res) => {
+  res.send(req.body)
+})
 
-  res.redirect("/")
+
+router.post("/register", (req, res) => {
+  res.send(req.body)
 })
 
 router.get("/logout", auth, (req, res) => { 
@@ -34,8 +39,6 @@ router.get("/logout", auth, (req, res) => {
 
     res.render("logout", { layout: 'logout', name }) // despues de aqui el backend no puede hacer mas nada
   })
-
-  
 })
 
 module.exports = router

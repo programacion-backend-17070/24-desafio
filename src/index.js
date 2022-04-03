@@ -1,6 +1,7 @@
 (async () => {
   const express = require('express');
   const path = require('path');
+  const mongoose = require("mongoose")
   const app = express();
 
   const { engine } = require('express-handlebars');
@@ -21,6 +22,8 @@
 
   const PORT = process.env.PORT || 8080
   const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = mongoConfig
+
+  await mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS} `)
 
   app.set('view engine', 'hbs');
   app.engine('hbs', engine({
