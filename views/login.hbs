@@ -2,25 +2,25 @@
   <fieldset class="uk-fieldset">
     <legend class="uk-legend">Enter your credentials</legend>
 
+    {{#if error}}
+      <div class="uk-margin">
+        <div class="uk-alert-danger" uk-alert>
+          <p>{{{error}}}</p>
+        </div>
+      </div>
+    {{/if}}
+
     <div class="uk-margin">
       <label class="uk-form-label" for="email">Email</label>
       <div class="uk-form-controls">
-        <input
-          class="uk-input"
-          type="text"
-          name="email"
-        />
+        <input class="uk-input" type="text" name="email" />
       </div>
     </div>
 
     <div class="uk-margin">
       <label class="uk-form-label" for="email">Password</label>
       <div class="uk-form-controls">
-        <input
-          class="uk-input"
-          type="password"
-          name="pwd"
-        />
+        <input class="uk-input" type="password" name="pwd" />
       </div>
     </div>
 
