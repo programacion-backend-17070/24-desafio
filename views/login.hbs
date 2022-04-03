@@ -1,7 +1,25 @@
+<form class="uk-position-center" action="/login" method="POST">
+  <fieldset class="uk-fieldset">
+    <legend class="uk-legend">Enter your credentials</legend>
+    <div class="uk-margin">
+      <div class="uk-inline">
+        <span class="uk-form-icon" uk-icon="icon: user"></span>
+        <input name="email" class="uk-input" type="text" />
+      </div>
+    </div>
 
-<form action="/login" method="POST">
-  <p>Ingrese su nombre</p>
-  <input name="username" />
-  <button type="submit">Enviar</button>
+    <div class="uk-margin">
+      <div class="uk-inline">
+        <span
+          class="uk-form-icon uk-form-icon-flip"
+          uk-icon="icon: lock"
+        ></span>
+        <input name="pwd" class="uk-input" type="password" />
+      </div>
+    </div>
+
+    <div class="uk-margin">
+      <button type="submit" class="uk-button uk-button-primary">Login</button>
+    </div>
+  </fieldset>
 </form>
-

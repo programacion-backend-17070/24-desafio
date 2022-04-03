@@ -4,7 +4,7 @@ module.exports = {
     SCHEMA: "mongodb+srv",
     USER: "lalomx",
     PASSWORD: process.env.MONGO_PASSWORD,
-    DATABASE: "cualquiercosa",
+    DATABASE: "ecommerce",
     OPTIONS: "retryWrites=true&w=majority"
   }
 }

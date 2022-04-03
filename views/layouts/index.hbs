@@ -3,13 +3,15 @@
   <head>
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" type="text/css" />
+    {{> uikit-css}}
   </head>
   <body>
     {{> nav}}
-    <div class="container">
+    <div class="uk-container">
       <h1>Hola, bienvenidos</h1>
       {{{body}}}
     </div>
   </body>
   
+  {{> uikit-js}}
 </html>
