@@ -8,3 +8,11 @@ module.exports = {
     OPTIONS: "retryWrites=true&w=majority"
   }
 }
+
+// local
+// HOSTNAME: "localhost",
+//     SCHEMA: "mongodb",
+//     USER: "",
+//     PASSWORD: "",
+//     DATABASE: "ecommerce",
+//     OPTIONS: ""
