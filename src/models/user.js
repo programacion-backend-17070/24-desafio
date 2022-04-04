@@ -28,6 +28,10 @@ class UserModel {
     return this.model.exists({ email })
   }
 
+  async getById(id) {
+    return await this.model.findById(id)
+  }
+
 
   // obtener un usuario por email
   async getByEmail(email) {

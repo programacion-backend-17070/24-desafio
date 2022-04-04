@@ -20,10 +20,17 @@
 
   const homeRouter = require("./routes/home")
 
+  // passport
+  const passport = require('passport')
+  const flash = require('express-flash')
+  const initializePassport = require("./passport/local")
+
   const PORT = process.env.PORT || 8080
   const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = mongoConfig
 
   await mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS} `)
+
+  initializePassport(passport)
 
   app.set('view engine', 'hbs');
   app.engine('hbs', engine({
@@ -36,6 +43,7 @@
   // json middlewares -> req.body {}
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use(flash())
   app.use(cookieParser("esto es un secreto")) // req.cookies = {}
   app.use(session({
     secret: "secret",
@@ -49,6 +57,8 @@
       autoRemove: "native"
     })
   })) // req.session
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   app.use("/static/", express.static(path.join(__dirname, "../public")))
 
