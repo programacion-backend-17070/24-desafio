@@ -1,9 +1,7 @@
 const Router = require("express").Router
 const auth = require("../middlewares/auth")
-const user = require("../models/user")
-const userModel = require("../models/user")
 const passport = require("passport")
-const { authenticate } = require("passport/lib")
+const { generateToken } = require("../auth/jwt")
 
 const router = Router()
 
@@ -18,10 +16,12 @@ router.get("/", auth, (req, res) => {
 router.get("/login", (req, res) => res.render("login", { layout: 'login' }))
 router.get("/register", (req, res) => res.render("register", { layout: 'login' }))
 router.post("/login", passport.authenticate("login", {
-  successRedirect: "/",
+  successRedirect: "/auth/jwt",
   failureRedirect: "/login",
   failureFlash: true
 }))
+
+
 router.post("/register", passport.authenticate("register", {
   successRedirect: "/",
   failureRedirect: "/register",
@@ -38,6 +38,19 @@ router.get("/auth/google/callback", passport.authenticate("google", {
   successRedirect: "/",
   failureRedirect: "/login"
 }))
+
+
+// GENERACION DE JWT
+
+router.get("/auth/jwt", auth, (req, res) => {
+  console.log(req.user)
+
+  const token = generateToken(req.user)
+  res.clearCookie("token")
+  res.cookie("token", token)
+
+  res.redirect("/")
+})
 
 router.get("/logout", auth, (req, res) => {
   const { firstname, lastname } = req.user

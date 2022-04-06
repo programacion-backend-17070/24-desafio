@@ -61,7 +61,12 @@ module.exports = (passport) => {
 
   passport.serializeUser((user, done) => done(null, user.id))
   passport.deserializeUser(async (id, done) => {
-    console.log(id)
-    done(null, await userModel.getById(id))
+    const user = await userModel.getById(id)
+    done(null, {
+      id: user._id.toString(),
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname
+    })
   })
 }
