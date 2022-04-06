@@ -23,14 +23,16 @@
   // passport
   const passport = require('passport')
   const flash = require('express-flash')
-  const initializePassport = require("./passport/local")
+  const initializePassportLocal = require("./passport/local")
+  const initializePassportGoogle = require("./passport/google")
 
   const PORT = process.env.PORT || 8080
   const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = mongoConfig
 
   await mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS} `)
 
-  initializePassport(passport)
+  initializePassportLocal(passport)
+  initializePassportGoogle(passport)
 
   app.set('view engine', 'hbs');
   app.engine('hbs', engine({
