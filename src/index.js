@@ -19,6 +19,7 @@
   // routers
 
   const homeRouter = require("./routes/home")
+  const productsApiRoutes = require("./routes/api/products")
 
   // passport
   const passport = require('passport')
@@ -65,6 +66,7 @@
   app.use("/static/", express.static(path.join(__dirname, "../public")))
 
   app.use("/", homeRouter)
+  app.use("/api", productsApiRoutes)
 
   app.listen(
     PORT,

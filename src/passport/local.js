@@ -5,6 +5,7 @@ module.exports = (passport) => {
   const authenticateUser = async (email, password, done) => {
     try {
       // checar que exista el email
+      console.log(email)
       if (!await userModel.existsByEmail(email)) {
         // regresar al usuario a la misma pantalla
         console.log("no existe desde passport")
@@ -47,9 +48,10 @@ module.exports = (passport) => {
       console.log(user)
 
       done(null, {
-        ...user,
-        id: user._id,
-        name: `${fname} ${lname}`
+        id: user._id.toString(),
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname
       })
     } catch (err) {
       done(err)
@@ -62,6 +64,12 @@ module.exports = (passport) => {
   passport.serializeUser((user, done) => done(null, user.id))
   passport.deserializeUser(async (id, done) => {
     console.log(id)
-    done(null, await userModel.getById(id))
+    const user = await userModel.getById(id)
+    done(null, {
+      id: user._id.toString(),
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname
+    })
   })
 }

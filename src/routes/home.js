@@ -1,5 +1,6 @@
 const Router = require("express").Router
 const auth = require("../middlewares/auth")
+const { generateToken } = require("../auth/jwt")
 const passport = require("passport")
 
 const router = Router()
@@ -15,9 +16,17 @@ router.get("/", auth, (req, res) => {
 router.get("/login", (req, res) => res.render("login", { layout: 'login' }))
 router.get("/register", (req, res) => res.render("register", { layout: 'login' }))
 
+router.get("/login/token", (req, res) => {
+  console.log(req.user)
+  const token = generateToken(req.user)
+  console.log(token)
+  res.cookie("token", token)
+
+  res.redirect("/")
+})
 
 router.post("/login", passport.authenticate("login", {
-  successRedirect: "/",
+  successRedirect: "/login/token",
   failureRedirect: "/login",
   failureFlash: true
 }))
