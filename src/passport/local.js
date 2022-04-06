@@ -55,7 +55,7 @@ module.exports = (passport) => {
       done(err)
     }
   }
-  // username y password
+  // por default passport espera dos campos: username y password
   passport.use('login', new LocalStategy({ usernameField: 'email', passwordField: 'pwd' }, authenticateUser))
   passport.use('register', new LocalStategy({ usernameField: 'email', passwordField: 'pwd', passReqToCallback: true }, registerUser))
 

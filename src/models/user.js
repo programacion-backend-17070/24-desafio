@@ -54,6 +54,18 @@ class UserModel {
     return await bcrypt.compare(pwd, user.password)
   }
 
+
+  findOrCreateByEmail(email, user, done) {
+    this.model.findOneAndUpdate({ email }, user, { upsert: true, new: true }, (err, createdUser) => {
+      done(err, {
+        id: createdUser._id.toString(),
+        firstname: createdUser.firstname,
+        lastname: createdUser.lastname,
+        email: createdUser.email
+      })
+    })
+  }
+
 }
 
 module.exports = new UserModel()

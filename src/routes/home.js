@@ -9,11 +9,12 @@ const router = Router()
 
 router.get("/", auth, (req, res) => {
 
-  const { name } = req.user
+  const { firstname, lastname } = req.user
 
-  res.render("main", { name })
+  res.render("main", { name: `${firstname} ${lastname}` })
 })
 
+// USUARIO Y CONTRASEÑA
 router.get("/login", (req, res) => res.render("login", { layout: 'login' }))
 router.get("/register", (req, res) => res.render("register", { layout: 'login' }))
 router.post("/login", passport.authenticate("login", {
@@ -27,11 +28,22 @@ router.post("/register", passport.authenticate("register", {
   failureFlash: true
 }))
 
+// INICIO DE SESION CON GOOGLE
+
+router.get("/auth/google", passport.authenticate("google", {
+  scope: ['email', 'profile']
+}))
+
+router.get("/auth/google/callback", passport.authenticate("google", {
+  successRedirect: "/",
+  failureRedirect: "/login"
+}))
+
 router.get("/logout", auth, (req, res) => {
-  const { name } = req.user
+  const { firstname, lastname } = req.user
 
   req.logOut()
-  res.render("logout", { layout: 'logout', name })
+  res.render("logout", { layout: 'logout', name: `${firstname} ${lastname}` })
 })
 
 module.exports = router
